@@ -6,14 +6,14 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 jq=$DIR/jq
 chmod +x $jq
 
-extract_mongo_url() {
+extract_couchdb_url() {
   # Set if not already present.
-  if [ -z "${MONGO_URL}" ]; then
-    #echo "Pulling MONGO_URL from VCAP_SERVICES"
-    # Find the first service key that contains "mongo", then grab the 'url' (or 'uri') key beneath it.
-    export MONGO_URL=`echo $VCAP_SERVICES | $jq 'to_entries|map(select(.key|contains("mongo")))[0]|.value[0].credentials|if .url then .url else .uri end|. // empty'`
+  if [ -z "${COUCHDB_URL}" ]; then
+    #echo "Pulling COUCHDB_URL from VCAP_SERVICES"
+    # Find the first service key that contains "cloudant", then grab the 'url' (or 'uri') key beneath it.
+    export COUCHDB_URL=`echo $VCAP_SERVICES | $jq 'to_entries|map(select(.key|contains("cloudant")))[0]|.value[0].credentials|if .url then .url else .uri end|. // empty'`
   fi
-  #echo "MONGO_URL: $MONGO_URL"
+  #echo "COUCHDB_URL: $COUCHDB_URL"
 }
 
 extract_root_url() {
@@ -23,11 +23,11 @@ extract_root_url() {
   #echo "ROOT_URL: $ROOT_URL"
 }
 
-extract_mongo_url
+extract_couchdb_url
 extract_root_url
 
 cat <<-YAML
 ---
 default_process_types:
-  web: MONGO_URL=$MONGO_URL ROOT_URL=$ROOT_URL vendor/node/bin/node deploy/bundle/main.js
+  web: COUCHDB_URL=$COUCHDB_URL ROOT_URL=$ROOT_URL vendor/node/bin/node deploy/bundle/main.js
 YAML
