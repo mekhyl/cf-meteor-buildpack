@@ -70,8 +70,8 @@ install_meteor() {
 build() {
   (
     cd $BUILD_DIR
-    $METEOR_NODE_VERSION=$(meteor node --version)
-    $METEOR_NPM_VERSION=$(meteor npm --version)
+    METEOR_NODE_VERSION=$(meteor node --version)
+    METEOR_NPM_VERSION=$(meteor npm --version)
     status "Meteor node/npm versions: $METEOR_NODE_VERSION/$METEOR_NPM_VERSION"
     if [ ! -d "deploy" ] ; then
       status "Building meteor bundle"
