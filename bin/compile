@@ -70,6 +70,9 @@ install_meteor() {
 build() {
   (
     cd $BUILD_DIR
+    meteor node --version > $METEOR_NODE_VERSION
+    meteor npm --version > $METEOR_NPM_VERSION
+    status "Meteor node/npm versions: $METEOR_NODE_VERSION/$METEOR_NPM_VERSION"
     if [ ! -d "deploy" ] ; then
       status "Building meteor bundle"
       meteor build --directory deploy --server http://localhost:3000 --architecture os.linux.x86_64
